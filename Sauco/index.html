@@ -17,12 +17,21 @@
             <option value="" selected disabled>Seleccione</option>
             <option value="Femenino">Femenino</option>
             <option value="Masculino">Masculino</option>
-            <option value="Pansexual">Pansexual</option>
-            <option value="Hermafrodita">Hermafrodita</option>
+            <option value="Otro">Otro</option>
         </select>
         <button v-on:click="agregar()">Agregar</button>
         <ul>
-            <li v-for="(persona, index) in personas" :key="index">
+            <span>Filtrar por sexo </span>
+            <select id="sexSelector" v-model="filter">
+                <option value="">Todos</option>
+                <option value="Femenino">Masculino</option>              
+                <option value="Masculino">Femenino</option>
+            </select>
+            <!--<button v-on:click="filterMethod()">Filtrar</button>-->
+            <li 
+                v-for="(persona, index) in personas" 
+                :key="index"
+                v-if = "persona.sexo !== filter">
                 <a>{{ persona.nombre }} - {{persona.edad}} años - {{persona.sexo}}</a>
             </li>
         </ul>
@@ -32,6 +41,7 @@
         new Vue({
             el: "#app",
             data: {
+                filter : "",
                 personas: [],
                 persona: {
                     nombre: "",
@@ -53,8 +63,7 @@
                     }else{
                         alert("Complete todos los campos correctamente");
                     }
-                    
-                }
+                },                
             }
         });
     </script>
