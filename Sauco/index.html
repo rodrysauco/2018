@@ -7,41 +7,48 @@
 
 <body>
     <div id="app">
-        <h1>Ingrese los datos solicitados</h1>
-        <label for="name">Nombre: </label>
-        <input type="text" v-model="persona.nombre" id="name">
-        <label for="age">Edad: </label>
-        <input type="number" v-model="persona.edad" id="age" min="0">
-        <label for="sex">Sexo: </label>
-        <select id="sex" v-model="persona.sexo">
-            <option value="" selected disabled>Seleccione</option>
-            <option value="Femenino">Femenino</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Otro">Otro</option>
-        </select>
-        <button v-on:click="agregar()">Agregar</button>
-        <ul>
-            <span>Filtrar por sexo </span>
-            <select id="sexSelector" v-model="filter">
-                <option value="">Todos</option>
-                <option value="Femenino">Masculino</option>              
-                <option value="Masculino">Femenino</option>
+        <section>
+            <h1>Ingrese los datos solicitados</h1>
+            <label for="name">Nombre: </label>
+            <input type="text" v-model="persona.nombre" id="name">
+            <label for="age">Edad: </label>
+            <input type="number" v-model="persona.edad" id="age" min="0">
+            <label for="sex">Sexo: </label>
+            <select id="sex" v-model="persona.sexo">
+                <option value="" selected disabled>Seleccione</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Pansexual">Pansexual</option>
+                <option value="Hermafrodita">Hermafrodita</option>
+                <option value="Otro">Otro</option>
             </select>
-            <!--<button v-on:click="filterMethod()">Filtrar</button>-->
-            <li 
-                v-for="(persona, index) in personas" 
-                :key="index"
-                v-if = "persona.sexo !== filter">
-                <a>{{ persona.nombre }} - {{persona.edad}} años - {{persona.sexo}}</a>
-            </li>
-        </ul>
+            <button v-on:click="agregar()">Agregar</button>
+        </section>
+        <section>
+            <span>Filtrar por sexo </span>
+            <select name="opciones" v-model="filter">
+                <option value="">Todos</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Pansexual">Pansexual</option>
+                <option value="Hermafrodita">Hermafrodita</option>
+                <option value="Otro">Otro</option>
+            </select>
+        </section>
+        <section>
+            <ul>
+                <li v-for="(persona, index) in people" :key="index">
+                    <a>{{ persona.nombre }} - {{persona.edad}} años - {{persona.sexo}}</a>
+                </li>
+            </ul>
+        </section>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
         new Vue({
             el: "#app",
             data: {
-                filter : "",
+                filter: "",
                 personas: [],
                 persona: {
                     nombre: "",
@@ -49,21 +56,32 @@
                     sexo: ""
                 }
             },
+            computed: {
+                people: function (){
+                    let filteredPeople;
+                    if (this.filter === "") {
+                        filteredPeople = this.personas;
+                    } else {
+                        filteredPeople = this.personas.filter(persona => persona.sexo === this.filter);
+                    }
+                    return filteredPeople;
+                }
+            },
             methods: {
                 agregar() {
-                    if(isNaN(this.persona.nombre) && this.persona.edad !== "" && this.persona.sexo !== ""){
+                    if (isNaN(this.persona.nombre) && this.persona.edad !== "" && this.persona.sexo !== "") {
                         this.personas.push({
-                        nombre: this.persona.nombre,
-                        edad: this.persona.edad,
-                        sexo: this.persona.sexo
-                    });
-                    this.persona.nombre = "";
-                    this.persona.edad = "";
-                    this.persona.sexo = "";
-                    }else{
+                            nombre: this.persona.nombre,
+                            edad: this.persona.edad,
+                            sexo: this.persona.sexo
+                        });
+                        this.persona.nombre = "";
+                        this.persona.edad = "";
+                        this.persona.sexo = "";
+                    } else {
                         alert("Complete todos los campos correctamente");
                     }
-                },                
+                },
             }
         });
     </script>
