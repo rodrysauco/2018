@@ -3,20 +3,30 @@
     {{people.nombre}} de 
     {{people.edad}} años,  
     {{people.sexo}}
-    <button @click="editMe"><i class="material-icons fs18">edit</i></button>
-    <button @click="deleteMe"><i class="material-icons fs18">delete</i></button>
+    <button class="button" @click="editMe"><i class="material-icons fs18">{{editBtn}}</i></button>
+    <button class="button" @click="deleteMe"><i class="material-icons fs18">delete</i></button>
   </li>
 </template>
 <script>
 export default {
   name: 'person-item',
+  data(){
+    return{
+      editBtn : "edit"
+    }
+  },
   props: {
     people: Object,
-    i: Number
+    i: Number,
   },
   methods: {
     editMe(){
       this.$emit('edit',this.i);
+      if(this.editBtn === "edit"){
+        this.editBtn = "cancel";
+      } else {
+        this.editBtn = "edit";
+      }
     },
     deleteMe(){
       this.$emit('delete', this.i);
@@ -28,6 +38,10 @@ export default {
 <style>
   .fs18{
     font-size: 18px;
+  }
+  .button{
+    cursor: pointer;
+    margin-left:5px;
   }
 </style>
 

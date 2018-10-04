@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <label for="sex">Mostrar: </label>
-    <select id="sex" @change="filtering">
+    <select id="sex" @change="filtering" class="pointer">
       <option value="" selected>Todos</option>
       <option value="Masculino">Masculino</option>
       <option value="Femenino">Femenino</option>
@@ -51,5 +51,8 @@
   }
   .noPeople{
     padding: 20px;
+  }
+  .pointer{
+    cursor: pointer;
   }
 </style>

@@ -7,6 +7,7 @@
         @edad="setAge" 
         @sexo="setSex" 
         @doIt="agregar"
+        :errors="errores"
         :name="persona.nombre"
         :edad="persona.edad"
         :sexo="persona.sexo"/>
@@ -18,30 +19,38 @@
         @delete="errase"
         @edit="editMe"/>
     </section>
-    <section v-if="editable.nombre !== undefined" class="editPart">
-        <add-person 
-        :name="editable.nombre"
-        :edad="editable.edad"
-        :sexo="editable.sexo"/>  
+    <section v-if="editable.persona !== undefined" class="editPart">
+        <add-person
+        @name="editName" 
+        @sexo="editSex"
+        @edad="editAge"
+        @doIt="confirmEdition"
+        :errors="errorsEdit"
+        :name="editable.persona.nombre"
+        :edad="editable.persona.edad"
+        :sexo="editable.persona.sexo"/>  
     </section>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import PersonList from './components/PersonList.vue'
 import AddPerson from './components/AddPerson.vue'
 export default {
   name: 'app',
   components: {
-    HelloWorld,
     PersonList,
     AddPerson
   },
   data() {
     return {
+      errores: [],
+      errorsEdit: [],
       personas: [],
-      editable: {},
+      editable: {
+        id : Number,
+        persona: undefined
+      },
       filter: "",
       persona: {
         nombre: "",
@@ -72,7 +81,9 @@ export default {
       this.persona.sexo = sexo;
     },
     agregar() {
-      if (this.persona.nombre !== '' && this.persona.edad !== "" && this.persona.sexo !== "") {
+      let flag = this.checkForm(1);
+      if(flag){
+        if (this.persona.nombre !== '' && this.persona.edad !== "" && this.persona.sexo !== "") {
         this.personas.push({
           nombre: this.persona.nombre,
           edad: this.persona.edad,
@@ -81,19 +92,78 @@ export default {
         this.persona.nombre = "";
         this.persona.edad = "";
         this.persona.sexo = "";
-      } else {
-        alert("Complete todos los campos correctamente");
       }
+      }
+    },
+    checkForm(type){
+      let err = [];
+      if(type == 1){
+        if (!this.persona.nombre) {
+          err.push('Falta el nombre');
+        }
+        if (!this.persona.edad) {
+          err.push('Falta la edad');
+        }
+        if (!this.persona.sexo) {
+          err.push('Falta el sexo');
+        }
+        this.errores = err;
+        if (this.persona.nombre && this.persona.edad && this.persona.sexo) {
+          return true;
+        }
+      } else {
+         if (!this.editable.persona.nombre) {
+          err.push('Falta el nombre');
+        }
+        this.errorsEdit = err;
+        if (this.editable.persona.nombre && this.editable.persona.edad && this.editable.persona.sexo) {
+          return true;
+        }       
+      }
+      
     },
     filterData(sex){
       this.filter = sex;
     },
     errase(index){
       this.personas.splice(index,1);
+      if(this.editable.id === index){
+        this.editable.id = undefined;
+        this.editable.persona = undefined;
+      }
     },
     editMe(index){
-      this.editable = this.personas[index];
+      if(this.editable.id === index){
+        this.editable.id = undefined;
+        this.editable.persona = undefined;
+      }else{
+        this.editable.id = index;
+        this.editable.persona = {
+          nombre : this.personas[index].nombre,
+          edad : this.personas[index].edad,
+          sexo : this.personas[index].sexo
+        }
+      }
+    },
+    confirmEdition(){
+      if(this.checkForm(2)){
+        let index = this.editable.id;
+        this.personas[index].nombre = this.editable.persona.nombre;
+        this.personas[index].edad = this.editable.persona.edad;
+        this.personas[index].sexo = this.editable.persona.sexo;
+        this.editable.persona = undefined; 
+      }
+    },
+    editName(name){
+      this.editable.persona.nombre = name;
+    },
+    editSex(sex){
+      this.editable.persona.sexo = sex;
+    },
+    editAge(edad){
+      this.editable.persona.edad = edad
     }
+    
   }
 }
 </script>

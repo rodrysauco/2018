@@ -1,5 +1,11 @@
 <template>
   <section class='addPerson'>
+    <form v-on:submit.prevent>
+      <div v-if="errors">
+				<ul>
+					<li style="color:red;" v-for="error in errors">{{ error }}</li>
+				</ul>
+			</div>
     <div class="inputDetails">
       <label for="name">Nombre: </label>
       <input type="text" @input="nameChanged" :value="name" id="name" placeholder="Ingrese nombre" class="nameImput">
@@ -10,7 +16,7 @@
     </div>
     <div class="inputDetails">
       <label for="sex">Sexo: </label>
-      <select id="sex" @input="sexChanged" :value="sexo">
+      <select id="sex" @input="sexChanged" :value="sexo" class="pointer">
         <option value="" selected disabled>Seleccione</option>
         <option value="Masculino">Masculino</option>
         <option value="Femenino">Femenino</option>
@@ -20,8 +26,9 @@
       </select>
     </div>
     <div class="action">
-      <button @click="agregar">Agregar</button>
+      <button @click="agregar" class="pointer">Realizar</button>
     </div>
+    </form>
   </section>
 </template>
 
@@ -29,6 +36,7 @@
   export default {
     name: 'add-person',
     props: {
+      errors: Array,
       name: String,
       edad: 0,
       sexo: String
@@ -45,12 +53,15 @@
       },
       agregar() {
         this.$emit('doIt');
-      }
+      },
     }
   }
 </script>
 
 <style>
+  .pointer{
+    cursor: pointer;  
+  }
   .addPerson{
     width: 100%;
   }
