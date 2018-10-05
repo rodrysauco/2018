@@ -17,11 +17,10 @@ export default {
   },
   props: {
     people: Object,
-    i: Number,
   },
   methods: {
     editMe(){
-      this.$emit('edit',this.i);
+      this.$emit('edit',this.people.id);
       if(this.editBtn === "edit"){
         this.editBtn = "cancel";
       } else {
@@ -29,7 +28,7 @@ export default {
       }
     },
     deleteMe(){
-      this.$emit('delete', this.i);
+      this.$emit('delete', this.people.id);
     }
   }
 }

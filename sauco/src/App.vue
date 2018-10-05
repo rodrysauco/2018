@@ -34,38 +34,42 @@
 </template>
 
 <script>
-import PersonList from './components/PersonList.vue'
-import AddPerson from './components/AddPerson.vue'
+import PersonList from "./components/PersonList.vue";
+import AddPerson from "./components/AddPerson.vue";
 export default {
-  name: 'app',
+  name: "app",
   components: {
     PersonList,
     AddPerson
   },
   data() {
     return {
+      counter: 0,
       errores: [],
       errorsEdit: [],
       personas: [],
       editable: {
-        id : Number,
+        id: Number,
         persona: undefined
       },
       filter: "",
       persona: {
+        id: 0,
         nombre: "",
         edad: 0,
         sexo: ""
       }
-    }
+    };
   },
   computed: {
-    people: function () {
+    people: function() {
       let filteredPeople;
       if (this.filter === "") {
         filteredPeople = this.personas;
       } else {
-        filteredPeople = this.personas.filter(persona => persona.sexo === this.filter);
+        filteredPeople = this.personas.filter(
+          persona => persona.sexo === this.filter
+        );
       }
       return filteredPeople;
     }
@@ -77,95 +81,116 @@ export default {
     setAge(edad) {
       this.persona.edad = edad;
     },
-    setSex(sexo){
+    setSex(sexo) {
       this.persona.sexo = sexo;
     },
     agregar() {
       let flag = this.checkForm(1);
-      if(flag){
-        if (this.persona.nombre !== '' && this.persona.edad !== "" && this.persona.sexo !== "") {
-        this.personas.push({
-          nombre: this.persona.nombre,
-          edad: this.persona.edad,
-          sexo: this.persona.sexo
-        });
-        this.persona.nombre = "";
-        this.persona.edad = "";
-        this.persona.sexo = "";
-      }
+      if (flag) {
+        if (
+          this.persona.nombre !== "" &&
+          this.persona.edad !== "" &&
+          this.persona.sexo !== ""
+        ) {
+          this.personas.push({
+            id: this.counter,
+            nombre: this.persona.nombre,
+            edad: this.persona.edad,
+            sexo: this.persona.sexo
+          });
+          this.counter++;
+          this.persona.nombre = "";
+          this.persona.edad = "";
+          this.persona.sexo = "";
+        }
       }
     },
-    checkForm(type){
+    checkForm(type) {
       let err = [];
-      if(type == 1){
+      if (type == 1) {
         if (!this.persona.nombre) {
-          err.push('Falta el nombre');
+          err.push("Falta el nombre");
         }
         if (!this.persona.edad) {
-          err.push('Falta la edad');
+          err.push("Falta la edad");
         }
         if (!this.persona.sexo) {
-          err.push('Falta el sexo');
+          err.push("Falta el sexo");
         }
         this.errores = err;
         if (this.persona.nombre && this.persona.edad && this.persona.sexo) {
           return true;
         }
       } else {
-         if (!this.editable.persona.nombre) {
-          err.push('Falta el nombre');
+        if (!this.editable.persona.nombre) {
+          err.push("Falta el nombre");
         }
         this.errorsEdit = err;
-        if (this.editable.persona.nombre && this.editable.persona.edad && this.editable.persona.sexo) {
+        if (
+          this.editable.persona.nombre &&
+          this.editable.persona.edad &&
+          this.editable.persona.sexo
+        ) {
           return true;
-        }       
-      }
-      
-    },
-    filterData(sex){
-      this.filter = sex;
-    },
-    errase(index){
-      this.personas.splice(index,1);
-      if(this.editable.id === index){
-        this.editable.id = undefined;
-        this.editable.persona = undefined;
-      }
-    },
-    editMe(index){
-      if(this.editable.id === index){
-        this.editable.id = undefined;
-        this.editable.persona = undefined;
-      }else{
-        this.editable.id = index;
-        this.editable.persona = {
-          nombre : this.personas[index].nombre,
-          edad : this.personas[index].edad,
-          sexo : this.personas[index].sexo
         }
       }
     },
-    confirmEdition(){
-      if(this.checkForm(2)){
-        let index = this.editable.id;
+    filterData(sex) {
+      this.filter = sex;
+    },
+    errase(i) {
+      let toDelete = this.personas.find(p => p.id === i);
+      let index = this.personas.indexOf(toDelete);
+      if (this.editable.persona !== undefined) {
+        if (this.editable.persona.id === i) {
+          this.editable.persona = undefined;
+        }
+      }
+      this.personas.splice(index, 1);
+    },
+    editMe(index) {
+      if (this.editable.persona === undefined) {
+        let toEdit = this.personas.find(p => p.id === index);
+        this.editable.persona = {
+          id: toEdit.id,
+          nombre: toEdit.nombre,
+          edad: toEdit.edad,
+          sexo: toEdit.sexo
+        };
+      } else {
+        if (this.editable.persona.id === index) {
+          this.editable.persona = undefined;
+        } else {
+          this.editable.persona = {
+            id: toEdit.id,
+            nombre: toEdit.nombre,
+            edad: toEdit.edad,
+            sexo: toEdit.sexo
+          };
+        }
+      }
+    },
+    confirmEdition() {
+      if (this.checkForm(2)) {
+        let edited = this.personas.find(p => p.id === this.editable.persona.id);
+        let index = this.personas.indexOf(edited);
         this.personas[index].nombre = this.editable.persona.nombre;
         this.personas[index].edad = this.editable.persona.edad;
         this.personas[index].sexo = this.editable.persona.sexo;
-        this.editable.persona = undefined; 
+        this.editable.persona = undefined;
       }
     },
-    editName(name){
+    editName(name) {
       this.editable.persona.nombre = name;
     },
-    editSex(sex){
+    editSex(sex) {
       this.editable.persona.sexo = sex;
     },
-    editAge(edad){
-      this.editable.persona.edad = edad
+    editAge(edad) {
+      this.editable.persona.edad = edad;
     }
-    
   }
-}
+};
 </script>
 
 <style>
@@ -175,19 +200,19 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
-.header{
+.header {
   position: relative;
 }
-.bodyList{
+.bodyList {
   width: 60%;
   display: inline-block;
 }
-.editPart{
+.editPart {
   box-sizing: border-box;
   vertical-align: top;
   margin-top: 30px;
   width: 250px;
   text-align: right;
-  display: inline-block  
+  display: inline-block;
 }
 </style>
