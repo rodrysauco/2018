@@ -1,5 +1,6 @@
 <template>
   <section class='addPerson'>
+    {{this.title}} persona
     <form v-on:submit.prevent>
       <div v-if="errores">
         <ul>
@@ -26,19 +27,25 @@
           <option value="Otro">Otro</option>
         </select>
       </div>
-      <div class="action">
-        <button @click="agregar" class="pointer">Realizar</button>
+      <div class="action" v-if="title ==='Editar'">
+        <button @click="edit" class="pointer">Confirmar</button>
+        <button @click="cancelar"  class='pointer'>Cancelar</button>
       </div>
+        <div class="action" v-else>
+          <button @click="agregar" class="pointer">Confirmar</button>
+        </div>
     </form>
   </section>
 </template>
 
 <script>
+  import router from "@/router";
   import pplService from "@/services/pplService";
   export default {
     name: 'add-person',
     data() {
       return {
+        title:'',
         errores: [],
         persona: {
           id: 0,
@@ -48,15 +55,38 @@
         }
       }
     },
-    props: {
-      errors: Array,
-      name: String,
-      edad: 0,
-      sexo: String
+    beforeMount(){
+      this.checkStatus();
     },
+    //this part is commented because it overflow the system
+    // updated(){
+    //   console.log("updated");
+    //   this.checkStatus();
+    // },
     methods: {
+      checkStatus(){
+        if(this.$route.params.id !== undefined){
+        this.title = "Editar"
+        pplService.getOne(this.$route.params.id) // eslint-disable-next-line
+          .then((p)=>this.persona = p, (error)=> console.log(error));
+        }else{
+          this.title = "Agregar";
+          this.persona.nombre = "";
+          this.persona.edad = 0;
+          this.persona.sexo = "";
+        }
+      },
       nameChanged(event) {
         this.persona.nombre = event.target.value;
+      },
+      cancelar(){
+        router.push("/");
+      },
+      edit(){
+        if(this.checkForm()){
+          pplService.replace(this.persona);
+          router.push("/");
+        }
       },
       ageChanged(event) {
         this.persona.edad = event.target.value;
@@ -76,22 +106,29 @@
             this.persona.nombre = "";
             this.persona.edad = "";
             this.persona.sexo = "";
+            router.push("/");
           }
         }
       },
-      checkForm(type) {
+      checkForm() {
         let err = [];
         if (!this.persona.nombre) {
           err.push("Falta el nombre");
         }
         if (!this.persona.edad) {
           err.push("Falta la edad");
+        }else{
+          if(this.persona.edad < 0){
+            err.push("Todavia no naciste cabrón");
+          }else if(this.persona.edad > 100){
+            err.push("Los fosiles no usan PC");
+          }
         }
         if (!this.persona.sexo) {
           err.push("Falta el sexo");
         }
         this.errores = err;
-        if (this.persona.nombre && this.persona.edad && this.persona.sexo) {
+        if (this.errores.length === 0) {
           return true;
         }
       },

@@ -1,4 +1,3 @@
-const index = 0;
 export default {
   getAll() {
     return JSON.parse(localStorage.getItem("people")) || [];
@@ -10,17 +9,20 @@ export default {
     return new Promise((res, rej) => {
       try {
         const persons = this.getAll();
-
-        setTimeout(() => {
-          res(persons.find(person => person.id === id));
-        }, 2000);
+        setTimeout(
+          res(persons.find(person => person.id == id)), 2000
+        );
       } catch (e) {
         rej(e.toString());
       }
     });
   },
-  replace (id){
-
+  replace (person){
+    let people = this.getAll();
+    let edited = people.find(p => p.id === person.id);
+    let indexOfEdited = people.indexOf(edited);
+    people[indexOfEdited] = person;
+    this.saveAll(people);
   },
   save(name, age, sex) {
     let persons = this.getAll();

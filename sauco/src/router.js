@@ -2,7 +2,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import AddPerson from './components/AddPerson';
 import PersonList from './components/PersonList';
-import PersonItem from './components/PersonItem';
 
 Vue.use(VueRouter);
 
@@ -23,13 +22,8 @@ export default new VueRouter({
     {
       path: '/user/:id',
       name: "user",
-      component: PersonItem,
+      component: AddPerson,
       props : true
     },
-    {
-      path: '/edit',
-      name: "edit",
-      component: PersonItem
-    }
   ]
 })
