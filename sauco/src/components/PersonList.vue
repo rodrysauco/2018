@@ -1,86 +1,115 @@
 <template>
   <div v-if="people">
     <div class="container">
-      <label for="sex">Mostrar: </label>
-      <select id="sex" @change="filtering" class="pointer">
-        <option value="" selected>Todos</option>
-        <option value="Masculino">Masculino</option>
-        <option value="Femenino">Femenino</option>
-        <option value="Pansexual">Pansexual</option>
-        <option value="Hermafrodita">Hermafrodita</option>
-        <option value="Otro">Otro</option>
-      </select>
+      <div>
+        <span class="titleList">Filtrar</span>
+        <el-dropdown @command="filtering">
+          <span class="el-dropdown-link">
+            <el-button>{{filter}}<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="Todos">Todos</el-dropdown-item>
+            <el-dropdown-item command="Masculino">Masculino</el-dropdown-item>
+            <el-dropdown-item command="Femenino">Femenino</el-dropdown-item>
+            <el-dropdown-item command="Pansexual">Pansexual</el-dropdown-item>
+            <el-dropdown-item command="Hermafrodita">Hermafrodita</el-dropdown-item>
+            <el-dropdown-item command="Otro">Otro</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
       <div v-if=" 0 < people.length ">
-        <ul v-for="persona in this.people" :key="persona.id">
-          <person-item :people="persona" :i="persona.id" @edit="editItem" @delete="deleteItem"></person-item>
-        </ul>
+        <el-table :data="this.people">
+          <el-table-column label="Edad" prop="edad"></el-table-column>
+          <el-table-column label="Nombre" prop="nombre"></el-table-column>
+          <el-table-column label="Sexo" prop="sexo"></el-table-column>
+          <el-table-column label="Acciones">
+            <template slot-scope="scope">
+              <el-button icon="el-icon-edit" type="success" @click="editItem(scope.row)" circle></el-button>
+              <el-button icon="el-icon-delete" type="danger" @click="deleteItem(scope.row)" circle></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
       <div v-else class="noPeople">
-        No se hallaron resultados
+        <el-card shadow="always">
+          No hay personas almacenadas
+        </el-card>
       </div>
 
     </div>
   </div>
-  <div v-else>No hay personas almacenadas</div>
+  <div v-else>
+    <el-card shadow="always">
+      No hay personas almacenadas
+    </el-card>
+  </div>
 </template>
 
 <script>
-import PersonItem from './PersonItem.vue';
-import router from '../router.js'
-import pplService from "@/services/pplService";
+  import PersonItem from './PersonItem.vue';
+  import router from '../router.js'
+  import pplService from "@/services/pplService";
 
-export default {
-  name: 'person-list',
-  components: {
-    PersonItem
-  },
-  data() {
-    return {
-      personas: [],
-      filter: "",
-    }
-  },
-  computed: {
-    people: function () {
-      let filteredPeople;
-      if (this.filter === "") {
-        filteredPeople = this.personas;
-      } else {
-        filteredPeople = this.personas.filter(
-          persona => persona.sexo === this.filter
-        );
+  export default {
+    name: 'person-list',
+    components: {
+      PersonItem
+    },
+    data() {
+      return {
+        personas: [],
+        filter: "Todos",
       }
-      return filteredPeople;
-    }
-  },
-  mounted: function () {
-    this.personas = pplService.getAll();
-  },
-  methods: {
-    filtering(event) {
-      this.filter = event.target.value;
     },
-    deleteItem(i) {
-      let toDelete = this.personas.find(p => p.id === i);
-      let index = this.personas.indexOf(toDelete);
-      this.personas.splice(index, 1);
-      pplService.saveAll(this.personas);
+    computed: {
+      people: function () {
+        let filteredPeople;
+        if (this.filter === "Todos") {
+          filteredPeople = this.personas;
+        } else {
+          filteredPeople = this.personas.filter(
+            persona => persona.sexo === this.filter
+          );
+        }
+        return filteredPeople;
+      }
     },
-    editItem(i) {
-      router.push({ name : 'user', params : {id : i}})
+    mounted: function () {
+      this.personas = pplService.getAll();
+    },
+    methods: {
+      filtering(event) {
+        this.filter = event;
+      },
+      deleteItem(row) {
+        let toDelete = this.personas.find(p => p.id === row.id);
+        let index = this.personas.indexOf(toDelete);
+        this.personas.splice(index, 1);
+        pplService.saveAll(this.personas);
+      },
+      editItem(row) {
+        router.push({ name: 'user', params: { id: row.id } })
+      }
     }
   }
-}
 </script>
 
 <style>
-.container {
-  margin: 15px 0 0 10px;
-}
-.noPeople {
-  padding: 20px;
-}
-.pointer {
-  cursor: pointer;
-}
+  .container {
+    margin: 15px 0 0 10px;
+  }
+
+  .noPeople {
+    padding: 20px;
+  }
+
+  .titleList {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    margin: 0 30px 0 10px;
+  }
+
+  .pointer {
+    cursor: pointer;
+  }
 </style>
