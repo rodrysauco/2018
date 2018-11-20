@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <transition name="component-fade" mode="out-in">
+      <router-view />
+    </transition>
   </div>
 </template>
 
@@ -7,6 +10,9 @@
 
 export default {
   name: 'app',
+  beforeMount(){
+    this.$cookies.set("U53RN4M3","goli",60*30);
+  },
   components: {
   }
 }
@@ -14,7 +20,7 @@ export default {
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
