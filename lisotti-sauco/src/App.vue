@@ -10,9 +10,6 @@
 
 export default {
   name: 'app',
-  beforeMount(){
-    this.$cookies.set("U53RN4M3","goli",60*30);
-  },
   components: {
   }
 }
