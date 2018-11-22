@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
+import CardsComponent from './components/CardsComponent';
 
 Vue.use(VueRouter);
 
@@ -18,6 +19,11 @@ export default new VueRouter({
       path:'/login',
       name:'login',
       component: LoginComponent
+    },
+    {
+      path:'/cards',
+      name:'cards',
+      component: CardsComponent
     }
   ]
 })
