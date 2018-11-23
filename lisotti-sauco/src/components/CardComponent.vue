@@ -8,7 +8,7 @@
         <span>{{title}}</span>
       </section>
       <section class="card__subtitle">
-        <span>Victory Gold: {{subtitle}}</span>
+        <span>{{subtitle}}</span>
       </section>
     </div>
     <div class="card__action">
