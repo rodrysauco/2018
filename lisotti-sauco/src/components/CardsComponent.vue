@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <card-component v-if="filteredCards.length"
+    <recard-component v-if="filteredCards.length"
       v-for="card in filteredCards" 
       :key="card.idName" 
       :url="'http://www.clashapi.xyz/images/cards/'+card.idName+'.png'"
       :name="card.name"
       :title="card.name"
       :subtitle="'Rarity: '+ card.rarity">
-    </card-component>
+    </recard-component>
     <el-pagination
       @current-change="currentChange"
       :page-size="12"
@@ -18,12 +18,12 @@
   </div>
 </template>
 <script>
-import CardComponent from './CardComponent'
+import RecardComponent from './RecardComponent'
 import apiService from "./../services/apiService.js";
 export default {
   name: "cards-component",
   components: {
-    CardComponent
+    RecardComponent
   },
   data() {
     return {

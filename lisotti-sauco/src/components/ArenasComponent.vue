@@ -1,6 +1,6 @@
 <template>
   <div class="container" v-if="arenas.length">
-    <card-component 
+    <recard-component 
       v-for="arena in arenas" 
       :key="arena.idName" 
       :url="'http://www.clashapi.xyz/images/arenas/'+arena.idName+'.png'"
@@ -8,17 +8,17 @@
       :title="arena.name"
       :subtitle="'Victory Gold: '+arena.victoryGold"
       @clicked="redirectTo(arena.idName)">
-    </card-component>
+    </recard-component>
   </div>
 </template>
 <script>
-import CardComponent from './CardComponent';
+import RecardComponent from './RecardComponent';
 import router from '../router.js';
 import apiService from "./../services/apiService.js";
 export default {
   name: "arenas-component",
   components: {
-    CardComponent
+    RecardComponent
   },
   data() {
     return {

@@ -18,7 +18,7 @@
 </template>
 <script>
 export default {
-  name: 'card-component',
+  name: 'recard-component',
   props: {
     url: String,
     name: String,
