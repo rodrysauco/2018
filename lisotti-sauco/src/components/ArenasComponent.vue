@@ -6,12 +6,14 @@
       :url="'http://www.clashapi.xyz/images/arenas/'+arena.idName+'.png'"
       :name="arena.name"
       :title="arena.name"
-      :subtitle="'Victory Gold: '+arena.victoryGold">
+      :subtitle="'Victory Gold: '+arena.victoryGold"
+      @clicked="redirectTo(arena.idName)">
     </card-component>
   </div>
 </template>
 <script>
-import CardComponent from './CardComponent'
+import CardComponent from './CardComponent';
+import router from '../router.js';
 import apiService from "./../services/apiService.js";
 export default {
   name: "arenas-component",
@@ -23,6 +25,16 @@ export default {
       arenas: []
     };
   },
+  methods:{
+    redirectTo(key){
+      router.push({
+        name : 'arena',
+        params : {
+          id : key
+        }
+      })
+    },
+  },
   beforeMount() {
     apiService
       .getAllArenas()
@@ -33,7 +45,7 @@ export default {
 </script>
 <style>
 .container {
-  width: 90%;
+  width: 95%;
   margin-left: auto;
   margin-right: auto;
 }

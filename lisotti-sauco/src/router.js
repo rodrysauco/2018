@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
 import CardsComponent from './components/CardsComponent';
+import ArenaComponent from "./components/ArenaComponent";
 import ArenasComponent from './components/ArenasComponent';
 
 Vue.use(VueRouter);
@@ -31,6 +32,12 @@ export default new VueRouter({
       path: '/arenas',
       name: 'arenas',
       component: ArenasComponent
+    },
+    {
+      path: '/arenas/:id',
+      name: 'arena',
+      component: ArenaComponent,
+      props: true
     }
   ]
 })

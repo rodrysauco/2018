@@ -25,8 +25,8 @@ export default {
     title: String,
     subtitle: String
   },
-  methods:{
-    clicked(){
+  methods: {
+    clicked() {
       this.$emit("clicked");
     }
   }
@@ -34,15 +34,19 @@ export default {
 </script>
 <style>
 .card {
-  width: 30%;
+  width: 215px;
   margin-right: 2%;
   margin-bottom: 2%;
-  height: 425px;
+  height: 300px;
   float: left;
   position: relative;
+  transition: top ease 1s !important;
+}
+.card:hover {
+  top: -5px;
 }
 .card__image {
-  height: 300px;
+  height: 150px;
   text-align: center;
 }
 .card__image img {
@@ -60,14 +64,6 @@ export default {
   position: absolute;
   bottom: 0;
   right: 15px;
-}
-@media only screen and (max-width: 800px) {
-  .card {
-    height: 300px;
-  }
-  .card__image {
-    height: 150px;
-  }
 }
 </style>
 
