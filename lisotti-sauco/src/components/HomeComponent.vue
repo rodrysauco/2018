@@ -59,8 +59,13 @@ export default {
 }
 .headerActions > ul {
   display: inline-block;
-  width: 80%;
+  width: 89%;
   margin-top: 16px;
   margin-bottom: 16px;
+}
+@media only screen and (max-width : 800px){
+  .headerActions > ul {
+    width: 78%;
+  }
 }
 </style>
