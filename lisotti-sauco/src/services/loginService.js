@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default{
   login(username,pass){
     let tok = username+pass;

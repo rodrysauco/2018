@@ -1,19 +1,17 @@
 <template>
   <div class="home__wrapper">
+    <el-row class="headerActions">
+      <span class="appHeader"><img src="../media/logo.png" alt="Clash Royale Logo"></span>
+      <el-menu :default-active="index" class="el-menu-demo" mode='horizontal' :router='true'>
+        <el-menu-item index="/">Home</el-menu-item>
+        <el-menu-item index="/arenas">Arenas</el-menu-item>
+        <el-menu-item index="/cards">Cards</el-menu-item>
+        <el-menu-item index="/chests">Chests</el-menu-item>
+        <el-menu-item index="/leagues">Leagues</el-menu-item>
+        <el-menu-item index="/players">Players</el-menu-item>
+      </el-menu>
+    </el-row>
     <el-container>
-      <el-header class="appHeader">
-        <img src="../media/logo.png" alt="Clash Royale Logo">
-      </el-header>
-      <el-row class="headerActions">
-        <el-menu :default-active="index" class="el-menu-demo" mode='horizontal' :router='true'>
-          <el-menu-item index="/">Home</el-menu-item>
-          <el-menu-item index="/arenas">Arenas</el-menu-item>
-          <el-menu-item index="/cards">Cards</el-menu-item>
-          <el-menu-item index="/chests">Chests</el-menu-item>
-          <el-menu-item index="/leagues">Leagues</el-menu-item>
-          <el-menu-item index="/players">Players</el-menu-item>
-        </el-menu>
-      </el-row>
       <transition name='component-fade' mode="out-in">
         <router-view />
       </transition>
@@ -22,41 +20,47 @@
 </template>
 
 <script>
-import loginService from './../services/loginService.js';
-import router from '../router.js';
+import loginService from "./../services/loginService.js";
+import router from "../router.js";
 export default {
-  name:"home-component",
+  name: "home-component",
   computed: {
-    index: function () {
+    index: function() {
       let route = this.$route.path.split("/");
-      console.log(route);
-      return "/"+route[1];
+      return "/" + route[1];
     }
   },
-  methods:{
-    checkStatus(){
+  methods: {
+    checkStatus() {
       let credentials = loginService.getCredentials();
-      if(credentials === null){ 
-        router.push({name:"login"});
-      };      
+      if (credentials === null) {
+        router.push({ name: "login" });
+      }
     }
   },
-  beforeMount(){
+  beforeMount() {
     this.checkStatus();
   }
-}
+};
 </script>
 
 <style>
-.appHeader{
-  width: 200px;
-  display: inline;
+.appHeader {
+  width: 20%;
+  max-width: 150px;
+  padding: 10px;
+  display: inline-block;
 }
-.appHeader img{
+.appHeader img {
   width: 100%;
 }
-.headerActions{
-  display: inline;
-  
+.headerActions {
+  width: 100%;
+}
+.headerActions > ul {
+  display: inline-block;
+  width: 80%;
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 </style>
