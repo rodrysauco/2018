@@ -6,6 +6,8 @@ import LoginComponent from './components/LoginComponent';
 import CardsComponent from './components/CardsComponent';
 import ArenaComponent from "./components/ArenaComponent";
 import ArenasComponent from './components/ArenasComponent';
+import ChestsComponent from './components/ChestsComponent';
+
 
 Vue.use(VueRouter);
 
@@ -32,6 +34,11 @@ export default new VueRouter({
       path: '/arenas',
       name: 'arenas',
       component: ArenasComponent
+    },
+    {
+      path: '/chests',
+      name: 'chests',
+      component: ChestsComponent
     },
     {
       path: '/arenas/:id',
