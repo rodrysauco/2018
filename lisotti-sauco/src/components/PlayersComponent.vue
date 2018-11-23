@@ -1,13 +1,13 @@
 <template>
-  <div class="container" v-if="leagues.length">
+  <div class="container" v-if="players.length">
     <recard-component 
-      v-for="league in leagues" 
-      :key="league.idName"
-      :url="'http://www.clashapi.xyz/images/leagues/'+league.idName+'.png'"
-      :name="league.name"
-      :title="league.name"
-      :subtitle="'Victory Gold: '+league.victoryGold"
-      @clicked="redirectTo(league.idName)">
+      v-for="player in players" 
+      :key="player.level"
+      :url="'./../media/logo.png'"
+      :name="''+player.level"
+      :title="'Level ' + player.level"
+      :subtitle="'Max exp: '+player.maxExp"
+      @clicked="redirectTo(player.idName)">
     </recard-component>
   </div>
 </template>
@@ -16,19 +16,19 @@ import RecardComponent from './RecardComponent';
 import router from '../router.js';
 import apiService from "./../services/apiService.js";
 export default {
-  name: "leagues-component",
+  name: "players-component",
   components: {
     RecardComponent
   },
   data() {
     return {
-      leagues: []
+      players: []
     };
   },
   methods:{
     redirectTo(key){
       router.push({
-        name : 'league',
+        name : 'player',
         params : {
           id : key
         }
@@ -37,8 +37,8 @@ export default {
   },
   beforeMount() {
     apiService
-      .getAllLeagues()
-      .then(data => (this.leagues = data.data))
+      .getAllPlayers()
+      .then(data => (this.players = data.data))
       .catch(err => console.log(err));
   }
 };

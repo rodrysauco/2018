@@ -7,6 +7,8 @@ import CardsComponent from './components/CardsComponent';
 import ArenaComponent from "./components/ArenaComponent";
 import ArenasComponent from './components/ArenasComponent';
 import ChestsComponent from './components/ChestsComponent';
+import LeaguesComponent from './components/LeaguesComponent';
+import PlayersComponent from './components/PlayersComponent';
 
 
 Vue.use(VueRouter);
@@ -39,6 +41,16 @@ export default new VueRouter({
       path: '/chests',
       name: 'chests',
       component: ChestsComponent
+    },
+    {
+      path: '/leagues',
+      name: 'leagues',
+      component: LeaguesComponent
+    },
+    {
+      path: '/players',
+      name: 'players',
+      component: PlayersComponent
     },
     {
       path: '/arenas/:id',

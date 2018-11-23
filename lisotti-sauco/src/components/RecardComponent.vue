@@ -1,6 +1,6 @@
 <template>
   <el-card class="card">
-    <div class="card__image">
+    <div class="card__image" v-if="url">
       <img :src="url" :alt="name+' image'">
     </div>
     <div class="card__content">
