@@ -54,6 +54,7 @@ export default {
   width: 90%;
   margin-left: auto;
   margin-right: auto;
+  font-family: Helvetica, sans-serif;
 }
 .el-pagination {
   float: left;
