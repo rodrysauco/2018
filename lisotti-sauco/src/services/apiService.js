@@ -18,13 +18,13 @@ export default {
   getAllCards() {
     return axios.get(baseURL + "cards");
   },
-  getCardEspecific() {
+  getCard(idName) {
     return axios.get(baseURL + 'cards/' + idName);
   },
   getAllChests() {
     return axios.get(baseURL + "chests");
   },
-  getChest() {
+  getChest(idName) {
     return axios.get(baseURL + 'chests/' + idName);
   },
   getAllLeagues() {
@@ -38,5 +38,29 @@ export default {
   },
   getPlayer() {
     return axios.get(baseURL + 'players/' + idName);
+  },
+
+  translateImagesUrl(chests) {
+    chests.forEach(function (chest) {
+      chest.url = chest.idName.replace("-" + chest.arena, "");
+      if (chest.idName.indexOf("'") != -1) {
+        chest.url = chest.url.replace(/'/gi, "");
+      }
+      if (chest.league) {
+        chest.url = chest.url.replace("-" + chest.league, "");
+      }
+    })
+    return chests;
+  },
+
+  translateImageUrl(chest) {
+    chest.url = chest.idName.replace("-" + chest.arena, "");
+    if (chest.idName.indexOf("'") != -1) {
+      chest.url = chest.url.replace(/'/gi, "");
+    }
+    if (chest.league) {
+      chest.url = chest.url.replace("-" + chest.league, "");
+    }
+    return chests;
   }
 }

@@ -3,13 +3,14 @@ import VueRouter from 'vue-router';
 
 import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
+import CardComponent from './components/CardComponent.vue';
 import CardsComponent from './components/CardsComponent';
 import ArenaComponent from "./components/ArenaComponent";
 import ArenasComponent from './components/ArenasComponent';
+import ChestComponent from './components/ChestComponent';
 import ChestsComponent from './components/ChestsComponent';
 import LeaguesComponent from './components/LeaguesComponent';
 import PlayersComponent from './components/PlayersComponent';
-
 
 Vue.use(VueRouter);
 
@@ -57,6 +58,18 @@ export default new VueRouter({
       name: 'arena',
       component: ArenaComponent,
       props: true
-    }
+    },
+    {
+      path: '/cards/:id',
+      name: 'card',
+      component: CardComponent,
+      props: true
+    },
+    {
+      path: '/chests/:id',
+      name: 'chest',
+      component: ChestComponent,
+      props: true
+    },
   ]
 })

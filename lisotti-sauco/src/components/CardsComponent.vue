@@ -6,11 +6,12 @@
       :url="'http://www.clashapi.xyz/images/cards/'+card.idName+'.png'"
       :name="card.name"
       :title="card.name"
-      :subtitle="'Rarity: '+ card.rarity">
+      :subtitle="'Rarity: '+ card.rarity"
+      @clicked="redirectTo(card.idName)">
     </recard-component>
     <el-pagination
       @current-change="currentChange"
-      :page-size="12"
+      :page-size="14"
       :page-count="cards.length"
       layout="prev, pager, next"
       :total="cards.length">
@@ -18,7 +19,8 @@
   </div>
 </template>
 <script>
-import RecardComponent from './RecardComponent'
+import RecardComponent from './RecardComponent';
+import router from '../router.js';
 import apiService from "./../services/apiService.js";
 export default {
   name: "cards-component",
@@ -34,11 +36,19 @@ export default {
   methods: {
     currentChange(page){
       this.currentPage = page;
-    }
+    },
+    redirectTo(key){
+      router.push({
+        name : 'card',
+        params : {
+          id : key
+        }
+      })
+    },
   },
   computed: {
     filteredCards: function() {
-      return this.cards.slice((this.currentPage * 12) - 12, (this.currentPage * 12));
+      return this.cards.slice((this.currentPage * 14) - 14, (this.currentPage * 14));
     }
   },
   beforeMount() {

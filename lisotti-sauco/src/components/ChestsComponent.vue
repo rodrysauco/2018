@@ -6,11 +6,12 @@
       :url="'http://www.clashapi.xyz/images/chests/' + chest.url + '.png'"
       :name="chest.name"
       :title="chest.name"
-      :subtitle="'Arena: '+ chest.arena">
+      :subtitle="'Arena: '+ chest.arena"
+      @clicked="redirectTo(chest.idName)">
     </recard-component>
     <el-pagination
       @current-change="currentChange"
-      :page-size="12"
+      :page-size="14"
       :page-count="chests.length"
       layout="prev, pager, next"
       :total="chests.length">
@@ -18,7 +19,8 @@
   </div>
 </template>
 <script>
-import RecardComponent from './RecardComponent'
+import RecardComponent from './RecardComponent';
+import router from './../router';
 import apiService from "./../services/apiService.js";
 export default {
   name: "chests-component",
@@ -35,10 +37,18 @@ export default {
     currentChange(page){
       this.currentPage = page;
     },
+    redirectTo(key){
+      router.push({
+        name : 'chest',
+        params : {
+          id : key
+        }
+      })
+    },
   },
   computed: {
     filteredChests: function() {
-      return this.chests.slice((this.currentPage * 12) - 12, (this.currentPage * 12));
+      return this.chests.slice((this.currentPage * 14) - 14, (this.currentPage * 14));
     }
   },
   beforeMount() {
@@ -46,15 +56,7 @@ export default {
       .getAllChests()
       .then(data => {
         this.chests = data.data;
-        this.chests.forEach(function(chest) {
-        chest.url = chest.idName.replace("-"+chest.arena,"");
-        if(chest.idName.indexOf("'") != -1){
-          chest.url = chest.url.replace(/'/gi ,"");
-        }
-        if(chest.league){
-          chest.url = chest.url.replace("-"+chest.league,"");
-        }
-        })
+        this.chests = apiService.translateImagesUrl(this.chests);
       })
       .catch(err => console.log(err));
   }
