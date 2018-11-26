@@ -13,7 +13,6 @@
 </template>
 <script>
 import RecardComponent from './RecardComponent';
-import { Loading } from 'element-ui'
 import router from '../router.js';
 import apiService from "./../services/apiService.js";
 export default {

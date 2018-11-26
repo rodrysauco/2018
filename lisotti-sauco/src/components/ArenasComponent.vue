@@ -14,7 +14,6 @@
 <script>
 import RecardComponent from './RecardComponent';
 import router from '../router.js';
-import { Loading } from 'element-ui'
 import apiService from "./../services/apiService.js";
 export default {
   name: "arenas-component",

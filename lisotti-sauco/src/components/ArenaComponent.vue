@@ -75,7 +75,6 @@
 </template>
 <script>
 import apiService from '@/services/apiService';
-import { Loading } from 'element-ui'
 import router from './../router';
 export default {
   name: 'arena-component',

@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <recard-component
-      v-if="filteredCards.length"
       v-for="card in filteredCards"
       :key="card.idName"
       :url="'http://www.clashapi.xyz/images/cards/'+card.idName+'.png'"
@@ -21,7 +20,6 @@
 </template>
 <script>
 import RecardComponent from './RecardComponent';
-import { Loading } from 'element-ui';
 import router from '../router.js';
 import apiService from "./../services/apiService.js";
 export default {

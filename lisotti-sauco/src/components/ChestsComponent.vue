@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <recard-component v-if="filteredChests.length"
+    <recard-component
       v-for="chest in filteredChests" 
       :key="chest.idName"
       :url="'http://www.clashapi.xyz/images/chests/' + chest.url + '.png'"
@@ -75,7 +75,7 @@ export default {
     apiService
       .getAllChests()
       .then(data => this.displayData(data.data))
-      .catch(err => handleError(err.response));
+      .catch(err => this.handleError(err.response));
   }
 };
 </script>
