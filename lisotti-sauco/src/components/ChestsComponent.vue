@@ -11,7 +11,7 @@
     </recard-component>
     <el-pagination
       @current-change="currentChange"
-      :page-size="14"
+      :page-size="12"
       :page-count="chests.length"
       layout="prev, pager, next"
       :total="chests.length">
@@ -29,6 +29,7 @@ export default {
   },
   data() {
     return {
+      loading: Object,
       chests: [],
       currentPage: 1,
     };
@@ -45,19 +46,27 @@ export default {
         }
       })
     },
+    displayData(data){
+      this.chests = data;
+      this.loading.close();
+      this.chests = apiService.translateImagesUrl(this.chests);
+    }
   },
   computed: {
     filteredChests: function() {
-      return this.chests.slice((this.currentPage * 14) - 14, (this.currentPage * 14));
+      return this.chests.slice((this.currentPage * 12) - 12, (this.currentPage * 12));
     }
   },
   beforeMount() {
+    this.loading = this.$loading({
+      lock: true,
+      text: 'Loading',
+      spinner:'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    });
     apiService
       .getAllChests()
-      .then(data => {
-        this.chests = data.data;
-        this.chests = apiService.translateImagesUrl(this.chests);
-      })
+      .then(data => this.displayData(data.data))
       .catch(err => console.log(err));
   }
 };

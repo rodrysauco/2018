@@ -75,11 +75,13 @@
 </template>
 <script>
 import apiService from '@/services/apiService';
+import { Loading } from 'element-ui'
 import router from './../router';
 export default {
   name: 'arena-component',
   data() {
     return {
+      loading: Object,
       arena: Object,
       chests: Array,
       cards: Array,
@@ -87,6 +89,12 @@ export default {
     }
   },
   beforeMount() {
+    this.loading = this.$loading({
+      lock: true,
+      text: 'Loading',
+      spinner:'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    });
     let route = this.$route.path.split("/");
     apiService.getArena(route[2])
       .then(data => this.displayData(data.data))
@@ -98,6 +106,7 @@ export default {
     },
     displayData(data) {
       this.arena = data;
+      this.loading.close();
       this.bringChestInfo();
       this.bringCardInfo();
       this.bringLeagueInfo();
@@ -241,6 +250,9 @@ export default {
   right: 20px;
 }
 @media only screen and (max-width: 996px) {
+  .arena__title{
+    font-size : 30px;
+  }
   .arena__info {
     padding: 70px 0 0 5px;
   }

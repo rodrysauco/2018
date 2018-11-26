@@ -36,10 +36,22 @@ export default {
       if (credentials === null) {
         router.push({ name: "login" });
       }
+    },
+    loading(){
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      setTimeout(() => {
+        loading.close();
+      }, 1000);
     }
   },
   beforeMount() {
     this.checkStatus();
+    this.loading();
   }
 };
 </script>

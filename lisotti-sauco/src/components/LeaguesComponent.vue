@@ -13,6 +13,7 @@
 </template>
 <script>
 import RecardComponent from './RecardComponent';
+import { Loading } from 'element-ui'
 import router from '../router.js';
 import apiService from "./../services/apiService.js";
 export default {
@@ -22,6 +23,7 @@ export default {
   },
   data() {
     return {
+      loading: Object,
       leagues: []
     };
   },
@@ -34,11 +36,21 @@ export default {
         }
       })
     },
+    displayData(data){
+      this.leagues = data;
+      this.loading.close();
+    }
   },
   beforeMount() {
+    this.loading = this.$loading({
+      lock: true,
+      text: 'Loading',
+      spinner:'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    });
     apiService
       .getAllLeagues()
-      .then(data => (this.leagues = data.data))
+      .then(data => this.displayData(data.data))
       .catch(err => console.log(err));
   }
 };

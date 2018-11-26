@@ -43,22 +43,31 @@
         name: 'chest-component',
         data() {
             return {
+                loading : Object,
                 chest: Object,
             }
         },
         beforeMount() {
+            this.loading = this.$loading({
+                lock: true,
+                text: 'Loading',
+                spinner:'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+                });
             let route = this.$route.path.split("/");
             apiService.getChest(route[2])
-                .then(data => {
-                    this.chest = data.data;
-                    this.chest = apiService.translateImageUrl(this.chest);
-                })
+                .then(data => this.fetchData(data.data))
                 .catch(err => console.log(err))
 
         },
         methods: {
             goBack() {
                 router.go(-1);
+            },
+            fetchData(data){
+                this.chest = data;
+                this.chest = apiService.translateImageUrl(this.chest);
+                this.loading.close()
             }
         }
     }

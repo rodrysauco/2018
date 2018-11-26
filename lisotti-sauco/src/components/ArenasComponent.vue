@@ -14,6 +14,7 @@
 <script>
 import RecardComponent from './RecardComponent';
 import router from '../router.js';
+import { Loading } from 'element-ui'
 import apiService from "./../services/apiService.js";
 export default {
   name: "arenas-component",
@@ -22,6 +23,7 @@ export default {
   },
   data() {
     return {
+      loading: {},
       arenas: []
     };
   },
@@ -34,13 +36,22 @@ export default {
         }
       })
     },
+    receivingData(data){
+      this.arenas = data;
+      this.loading.close()
+    }
   },
   beforeMount() {
-    apiService
-      .getAllArenas()
-      .then(data => (this.arenas = data.data))
+    this.loading = this.$loading({
+      lock: true,
+      text: 'Loading',
+      spinner:'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    })
+    apiService.getAllArenas()
+      .then(data => this.receivingData(data.data))
       .catch(err => console.log(err));
-  }
+  },
 };
 </script>
 <style>

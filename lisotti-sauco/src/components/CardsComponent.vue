@@ -11,7 +11,7 @@
     </recard-component>
     <el-pagination
       @current-change="currentChange"
-      :page-size="14"
+      :page-size="12"
       :page-count="cards.length"
       layout="prev, pager, next"
       :total="cards.length">
@@ -20,6 +20,7 @@
 </template>
 <script>
 import RecardComponent from './RecardComponent';
+import { Loading } from 'element-ui';
 import router from '../router.js';
 import apiService from "./../services/apiService.js";
 export default {
@@ -29,6 +30,7 @@ export default {
   },
   data() {
     return {
+      loading : Object,
       cards: [],
       currentPage: 1,
     };
@@ -43,18 +45,28 @@ export default {
         params : {
           id : key
         }
-      })
+      });
     },
+     displayData(data) {
+      this.cards = data;
+      this.loading.close();
+     }
   },
   computed: {
     filteredCards: function() {
-      return this.cards.slice((this.currentPage * 14) - 14, (this.currentPage * 14));
+      return this.cards.slice((this.currentPage * 12) - 12, (this.currentPage * 12));
     }
   },
   beforeMount() {
+    this.loading = this.$loading({
+      lock: true,
+      text: 'Loading',
+      spinner:'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    });
     apiService
       .getAllCards()
-      .then(data => (this.cards = data.data))
+      .then(data => this.displayData(data.data))
       .catch(err => console.log(err));
   }
 };

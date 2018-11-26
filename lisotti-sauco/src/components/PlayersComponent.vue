@@ -3,7 +3,7 @@
     <recard-component 
       v-for="player in players" 
       :key="player.level"
-      :url="'./../media/logo.png'"
+      :url="'../media/player.png'"
       :name="''+player.level"
       :title="'Level ' + player.level"
       :subtitle="'Max exp: '+player.maxExp"
@@ -22,6 +22,7 @@ export default {
   },
   data() {
     return {
+      loading: Object,
       players: []
     };
   },
@@ -34,11 +35,21 @@ export default {
         }
       })
     },
+    fetchingData(data){
+      this.loading.close();
+      this.players = data;
+    }
   },
   beforeMount() {
+    this.loading = this.$loading({
+      lock: true,
+      text: 'Loading',
+      spinner:'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    });
     apiService
       .getAllPlayers()
-      .then(data => (this.players = data.data))
+      .then(data => this.fetchingData(data.data))
       .catch(err => console.log(err));
   }
 };

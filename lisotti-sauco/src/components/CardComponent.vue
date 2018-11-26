@@ -32,19 +32,30 @@ export default {
   name: 'card-component',
   data() {
     return {
+      loading: Object,
       card: Object,
     }
   },
   beforeMount() {
+    this.loading = this.$loading({
+      lock: true,
+      text: 'Loading',
+      spinner:'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    });
     let route = this.$route.path.split("/");
     apiService.getCard(route[2])
-      .then(data => this.card = data.data)
+      .then(data => this.displayData(data.data))
       .catch(err => console.log(err))
   },
   methods: {
     goBack() {
       router.go(-1);
-    }
+    },
+     displayData(data) {
+      this.card = data;
+      this.loading.close();
+     }
   }
 }
 </script>
