@@ -58,9 +58,7 @@
         },
         methods: {
             goBack() {
-                router.push({
-                    name: 'chests'
-                })
+                router.go(-1);
             }
         }
     }

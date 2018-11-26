@@ -22,27 +22,51 @@
       </div>
     </section>
     <div class="arena__body">
-      <section class="body__carrousel">
+      <section v-if="chests.length" class="body__carrousel">
         <span class="arena__body__title">Chests</span>
         <el-carousel :interval="4000" type="card">
-          <el-carousel-item v-for="chest in arena.chests" :key="chest">
-            <h3>{{chest}}</h3>
+          <el-carousel-item v-for="chest in chests" :key="chest._id">
+            <div class="carouselImg">
+              <img :src="'http://www.clashapi.xyz/images/chests/'+chest.url+'.png'">
+            </div>
+            <div class="carouselTitle">
+              <span>{{chest.name}}</span>
+            </div>
+            <div class="carousel__action">
+              <el-button size="medium" @click="clickedChest(chest.idName)" class="button">More details</el-button>
+            </div>
           </el-carousel-item>
         </el-carousel>
       </section>
-      <section class="body__carrousel">
+      <section v-if="cards.length" class="body__carrousel">
         <span class="arena__body__title">Cards</span>
         <el-carousel :interval="4000" type="card">
-          <el-carousel-item v-for="card in arena.cardUnlocks" :key="card">
-            <h3>{{card}}</h3>
+          <el-carousel-item v-for="card in cards" :key="card._id">
+            <div class="carouselImg">
+              <img :src="'http://www.clashapi.xyz/images/cards/'+card.idName+'.png'">
+            </div>
+            <div class="carouselTitle">
+              <span>{{card.name}}</span>
+            </div>
+            <div class="carousel__action">
+              <el-button size="medium" @click="clickedCard(card.idName)" class="button">More details</el-button>
+            </div>
           </el-carousel-item>
         </el-carousel>
       </section>
-      <section class="body__carrousel">
+      <section v-if="leagues.length" class="body__carrousel">
         <span class="arena__body__title">Leagues</span>
         <el-carousel :interval="4000" type="card">
-          <el-carousel-item v-for="league in arena.leagues" :key="league">
-            <h3>{{league}}</h3>
+          <el-carousel-item v-for="league in leagues" :key="league._id">
+            <div class="carouselImg">
+              <img :src="'http://www.clashapi.xyz/images/leagues/'+league.idName+'.png'">
+            </div>
+            <div class="carouselTitle">
+              <span>{{league.name}}</span>
+            </div>
+            <div class="carousel__action">
+              <el-button size="medium" @click="clickedLeague(league.idName)" class="button">More details</el-button>
+            </div>
           </el-carousel-item>
         </el-carousel>
       </section>
@@ -57,19 +81,69 @@ export default {
   data() {
     return {
       arena: Object,
+      chests: Array,
+      cards: Array,
+      leagues: Array
     }
   },
   beforeMount() {
     let route = this.$route.path.split("/");
     apiService.getArena(route[2])
-      .then(data => this.arena = data.data)
+      .then(data => this.displayData(data.data))
       .catch(err => console.log(err))
   },
   methods: {
     goBack() {
-      router.push({
-        name: 'arenas'
-      })
+      router.go(-1);
+    },
+    displayData(data) {
+      this.arena = data;
+      this.bringChestInfo();
+      this.bringCardInfo();
+      this.bringLeagueInfo();
+    },
+    bringChestInfo() {
+      this.chests = [];
+      for (let chest of this.arena.chests) {
+        apiService.getChest(chest)
+          .then(data => this.replaceChest(data.data))
+          .catch(err => console.log(err))
+      }
+    },
+    replaceChest(data) {
+      apiService.translateImageUrl(data);
+      this.chests.push(data);
+    },
+    bringCardInfo() {
+      this.cards = [];
+      for (let card of this.arena.cardUnlocks) {
+        apiService.getCard(card)
+          .then(data => this.replaceCard(data.data))
+          .catch(err => console.log(err))
+      }
+    },
+    replaceCard(data) {
+      this.cards.push(data);
+    },
+    bringLeagueInfo() {
+      this.leagues = [];
+      for (let league of this.arena.leagues) {
+        apiService.getLeague(league)
+          .then(data => this.replaceLeague(data.data))
+          .catch(err => console.log(err))
+      }
+    },
+    replaceLeague(data) {
+      this.leagues.push(data);
+    },
+    clickedCard(value){
+      router.push({ path:`/cards/${value}`});
+    },
+    clickedChest(value){
+      router.push({ path:`/chests/${value}`});
+    },
+    clickedLeague(value){
+      router.push({ path:`/leagues/${value}`});
     }
   }
 }
@@ -103,7 +177,7 @@ export default {
 .arena__info {
   display: inline-block;
   vertical-align: top;
-  padding: 70px 0 0 5px;
+  padding: 70px 0 0 125px;
 }
 .arena__title {
   font-size: 36px;
@@ -116,20 +190,20 @@ export default {
   width: 50%;
   display: inline-block;
 }
-.body__carrousel{
+.body__carrousel {
   width: 50%;
   float: left;
   text-align: center;
   box-sizing: border-box;
   padding: 5px;
 }
-.arena__body__title{
+.arena__body__title {
   font-size: 18px;
   font-style: italic;
   padding-bottom: 5px;
 }
 /* Carrousel */
-.el-carousel{
+.el-carousel {
   margin-top: 5px;
 }
 .el-carousel__item h3 {
@@ -146,5 +220,38 @@ export default {
 
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
+}
+.carouselImg {
+  margin-top: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  width: 35%;
+}
+.carouselImg img {
+  width: 100%;
+}
+.carouselTitle {
+  font-size: 22px;
+  margin-top: 5px;
+  font-style: italic;
+}
+.carousel__action{
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+}
+@media only screen and (max-width: 996px) {
+  .arena__info {
+    padding: 70px 0 0 5px;
+  }
+  .body__carrousel {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+  }
+  .carouselImg {
+    width: 50%;
+  }
 }
 </style>

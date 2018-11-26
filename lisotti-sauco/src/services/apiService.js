@@ -30,7 +30,7 @@ export default {
   getAllLeagues() {
     return axios.get(baseURL + "leagues");
   },
-  getLeague() {
+  getLeague(idName) {
     return axios.get(baseURL + 'leagues/' + idName);
   },
   getAllPlayers() {
@@ -61,6 +61,6 @@ export default {
     if (chest.league) {
       chest.url = chest.url.replace("-" + chest.league, "");
     }
-    return chests;
+    return chest;
   }
 }

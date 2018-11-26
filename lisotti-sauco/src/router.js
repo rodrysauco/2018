@@ -34,14 +34,32 @@ export default new VueRouter({
       component: CardsComponent
     },
     {
+      path: '/cards/:id',
+      name: 'card',
+      component: CardComponent,
+      props: true
+    },
+    {
       path: '/arenas',
       name: 'arenas',
       component: ArenasComponent
     },
     {
+      path: '/arenas/:id',
+      name: 'arena',
+      component: ArenaComponent,
+      props: true
+    },
+    {
       path: '/chests',
       name: 'chests',
       component: ChestsComponent
+    },
+    {
+      path: '/chests/:id',
+      name: 'chest',
+      component: ChestComponent,
+      props: true
     },
     {
       path: '/leagues',
@@ -52,24 +70,6 @@ export default new VueRouter({
       path: '/players',
       name: 'players',
       component: PlayersComponent
-    },
-    {
-      path: '/arenas/:id',
-      name: 'arena',
-      component: ArenaComponent,
-      props: true
-    },
-    {
-      path: '/cards/:id',
-      name: 'card',
-      component: CardComponent,
-      props: true
-    },
-    {
-      path: '/chests/:id',
-      name: 'chest',
-      component: ChestComponent,
-      props: true
     },
   ]
 })

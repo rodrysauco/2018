@@ -43,9 +43,7 @@ export default {
   },
   methods: {
     goBack() {
-      router.push({
-        name: 'cards'
-      })
+      router.go(-1);
     }
   }
 }
