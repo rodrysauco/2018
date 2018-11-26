@@ -98,7 +98,7 @@ export default {
     let route = this.$route.path.split("/");
     apiService.getArena(route[2])
       .then(data => this.displayData(data.data))
-      .catch(err => console.log(err))
+      .catch(err => this.handleError(err.response))
   },
   methods: {
     goBack() {
@@ -116,19 +116,26 @@ export default {
       for (let chest of this.arena.chests) {
         apiService.getChest(chest)
           .then(data => this.replaceChest(data.data))
-          .catch(err => console.log(err))
+          .catch(err => this.handleError(err.response))
       }
     },
     replaceChest(data) {
       apiService.translateImageUrl(data);
       this.chests.push(data);
     },
+    handleError(error){
+      this.loading.close();
+      this.$notify.error({
+          title: error.status,
+          message: error.statusText
+        });
+    },
     bringCardInfo() {
       this.cards = [];
       for (let card of this.arena.cardUnlocks) {
         apiService.getCard(card)
           .then(data => this.replaceCard(data.data))
-          .catch(err => console.log(err))
+          .catch(err => this.handleError(err.response))
       }
     },
     replaceCard(data) {
@@ -139,7 +146,7 @@ export default {
       for (let league of this.arena.leagues) {
         apiService.getLeague(league)
           .then(data => this.replaceLeague(data.data))
-          .catch(err => console.log(err))
+          .catch(err => this.handleError(err.response))
       }
     },
     replaceLeague(data) {

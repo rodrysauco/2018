@@ -46,6 +46,13 @@ export default {
         }
       })
     },
+    handleError(error){
+      this.loading.close();
+      this.$notify.error({
+          title: error.status,
+          message: error.statusText
+        });
+    },
     displayData(data){
       this.chests = data;
       this.loading.close();
@@ -68,7 +75,7 @@ export default {
     apiService
       .getAllChests()
       .then(data => this.displayData(data.data))
-      .catch(err => console.log(err));
+      .catch(err => handleError(err.response));
   }
 };
 </script>

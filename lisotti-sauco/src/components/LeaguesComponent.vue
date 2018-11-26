@@ -39,7 +39,14 @@ export default {
     displayData(data){
       this.leagues = data;
       this.loading.close();
-    }
+    },
+    handleError(error){
+      this.loading.close();
+      this.$notify.error({
+          title: error.status,
+          message: error.statusText
+        });
+    },
   },
   beforeMount() {
     this.loading = this.$loading({
@@ -51,7 +58,7 @@ export default {
     apiService
       .getAllLeagues()
       .then(data => this.displayData(data.data))
-      .catch(err => console.log(err));
+      .catch(err => this.handleError(err.response));
   }
 };
 </script>

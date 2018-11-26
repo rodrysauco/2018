@@ -1,21 +1,22 @@
 <template>
   <div class="container">
-    <recard-component v-if="filteredCards.length"
-      v-for="card in filteredCards" 
-      :key="card.idName" 
+    <recard-component
+      v-if="filteredCards.length"
+      v-for="card in filteredCards"
+      :key="card.idName"
       :url="'http://www.clashapi.xyz/images/cards/'+card.idName+'.png'"
       :name="card.name"
       :title="card.name"
       :subtitle="'Rarity: '+ card.rarity"
-      @clicked="redirectTo(card.idName)">
-    </recard-component>
+      @clicked="redirectTo(card.idName)"
+    ></recard-component>
     <el-pagination
       @current-change="currentChange"
       :page-size="12"
       :page-count="cards.length"
       layout="prev, pager, next"
-      :total="cards.length">
-    </el-pagination>
+      :total="cards.length"
+    ></el-pagination>
   </div>
 </template>
 <script>
@@ -30,30 +31,37 @@ export default {
   },
   data() {
     return {
-      loading : Object,
+      loading: Object,
       cards: [],
       currentPage: 1,
     };
   },
   methods: {
-    currentChange(page){
+    currentChange(page) {
       this.currentPage = page;
     },
-    redirectTo(key){
+    redirectTo(key) {
       router.push({
-        name : 'card',
-        params : {
-          id : key
+        name: 'card',
+        params: {
+          id: key
         }
       });
     },
-     displayData(data) {
+    displayData(data) {
       this.cards = data;
       this.loading.close();
-     }
+    },
+    handleError(error) {
+      this.loading.close();
+      this.$notify.error({
+        title: error.status,
+        message: error.statusText
+      });
+    },
   },
   computed: {
-    filteredCards: function() {
+    filteredCards: function () {
       return this.cards.slice((this.currentPage * 12) - 12, (this.currentPage * 12));
     }
   },
@@ -61,13 +69,13 @@ export default {
     this.loading = this.$loading({
       lock: true,
       text: 'Loading',
-      spinner:'el-icon-loading',
+      spinner: 'el-icon-loading',
       background: 'rgba(0, 0, 0, 0.7)'
     });
     apiService
       .getAllCards()
       .then(data => this.displayData(data.data))
-      .catch(err => console.log(err));
+      .catch(err => this.handleError(err.response));
   }
 };
 </script>
@@ -83,6 +91,6 @@ export default {
   width: 100%;
   text-align: center;
   margin-bottom: 15px;
-  }
+}
 </style>
 

@@ -1,14 +1,14 @@
 <template>
   <div class="container" v-if="players.length">
-    <recard-component 
-      v-for="player in players" 
+    <recard-component
+      v-for="player in players"
       :key="player.level"
       :url="'/img/player.849c79dc.png'"
       :name="''+player.level"
       :title="'Level ' + player.level"
       :subtitle="'Max exp: '+player.maxExp"
-      @clicked="redirectTo(player.idName)">
-    </recard-component>
+      @clicked="redirectTo(player.idName)"
+    ></recard-component>
   </div>
 </template>
 <script>
@@ -26,16 +26,23 @@ export default {
       players: []
     };
   },
-  methods:{
-    redirectTo(key){
+  methods: {
+    redirectTo(key) {
       router.push({
-        name : 'player',
-        params : {
-          id : key
+        name: 'player',
+        params: {
+          id: key
         }
       })
     },
-    fetchingData(data){
+    handleError(error) {
+      this.loading.close();
+      this.$notify.error({
+        title: error.status,
+        message: error.statusText
+      });
+    },
+    fetchingData(data) {
       this.loading.close();
       this.players = data;
     }
@@ -44,13 +51,13 @@ export default {
     this.loading = this.$loading({
       lock: true,
       text: 'Loading',
-      spinner:'el-icon-loading',
+      spinner: 'el-icon-loading',
       background: 'rgba(0, 0, 0, 0.7)'
     });
     apiService
       .getAllPlayers()
       .then(data => this.fetchingData(data.data))
-      .catch(err => console.log(err));
+      .catch(err => this.handleError(err.response));
   }
 };
 </script>

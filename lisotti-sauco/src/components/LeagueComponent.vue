@@ -22,21 +22,21 @@
       </div>
     </section>
     <section v-if="chests.length" class="body__carrousel">
-        <span class="arena__body__title">Chests</span>
-        <el-carousel :interval="4000" type="card">
-          <el-carousel-item v-for="chest in chests" :key="chest._id">
-            <div class="carouselImg">
-              <img :src="'http://www.clashapi.xyz/images/chests/'+chest.url+'.png'">
-            </div>
-            <div class="carouselTitle">
-              <span>{{chest.name}}</span>
-            </div>
-            <div class="carousel__action">
-              <el-button size="medium" @click="clickedChest(chest.idName)" class="button">More details</el-button>
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </section>
+      <span class="arena__body__title">Chests</span>
+      <el-carousel :interval="4000" type="card">
+        <el-carousel-item v-for="chest in chests" :key="chest._id">
+          <div class="carouselImg">
+            <img :src="'http://www.clashapi.xyz/images/chests/'+chest.url+'.png'">
+          </div>
+          <div class="carouselTitle">
+            <span>{{chest.name}}</span>
+          </div>
+          <div class="carousel__action">
+            <el-button size="medium" @click="clickedChest(chest.idName)" class="button">More details</el-button>
+          </div>
+        </el-carousel-item>
+      </el-carousel>
+    </section>
   </div>
 </template>
 <script>
@@ -46,15 +46,22 @@ export default {
   name: 'league-component',
   data() {
     return {
+      loading: Object,
       league: Object,
       chests: []
     }
   },
   beforeMount() {
+    this.loading = this.$loading({
+      lock: true,
+      text: 'Loading',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    });
     let route = this.$route.path.split("/");
     apiService.getLeague(route[2])
       .then(data => this.displayData(data.data))
-      .catch(err => console.log(err))
+      .catch(err => this.handleError(err.response))
   },
   methods: {
     goBack() {
@@ -63,14 +70,22 @@ export default {
     displayData(data) {
       this.league = data;
       this.bringChestInfo();
+      this.loading.close();
     },
     bringChestInfo() {
       this.chests = [];
       for (let chest of this.league.chests) {
         apiService.getChest(chest)
           .then(data => this.replaceChest(data.data))
-          .catch(err => console.log(err))
+          .catch(err => this.handleError(err.response))
       }
+    },
+    handleError(error) {
+      this.loading.close();
+      this.$notify.error({
+        title: error.status,
+        message: error.statusText
+      });
     },
     replaceChest(data) {
       apiService.translateImageUrl(data);
@@ -101,6 +116,16 @@ export default {
   display: inline-block;
   vertical-align: top;
   padding: 25px 0 0 5px;
+}
+.league__image {
+  width: 100%;
+  max-width: 200px;
+  margin-top: 20px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.league__image img {
+  width: 100%;
 }
 .league__title {
   font-size: 36px;

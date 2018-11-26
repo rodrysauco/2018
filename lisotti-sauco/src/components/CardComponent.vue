@@ -40,22 +40,29 @@ export default {
     this.loading = this.$loading({
       lock: true,
       text: 'Loading',
-      spinner:'el-icon-loading',
+      spinner: 'el-icon-loading',
       background: 'rgba(0, 0, 0, 0.7)'
     });
     let route = this.$route.path.split("/");
     apiService.getCard(route[2])
       .then(data => this.displayData(data.data))
-      .catch(err => console.log(err))
+      .catch(err => this.handleError(err.response))
   },
   methods: {
     goBack() {
       router.go(-1);
     },
-     displayData(data) {
+    displayData(data) {
       this.card = data;
       this.loading.close();
-     }
+    },
+    handleError(error) {
+      this.loading.close();
+      this.$notify.error({
+        title: error.status,
+        message: error.statusText
+      });
+    },
   }
 }
 </script>
@@ -81,6 +88,16 @@ export default {
   display: inline-block;
   vertical-align: top;
   padding: 25px 0 0 5px;
+}
+.card__image {
+  width: 100%;
+  max-width: 200px;
+  margin-top: 20px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.card__image img {
+  width: 100%;
 }
 .card__title {
   font-size: 36px;

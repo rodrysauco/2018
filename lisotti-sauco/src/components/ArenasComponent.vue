@@ -39,6 +39,13 @@ export default {
     receivingData(data){
       this.arenas = data;
       this.loading.close()
+    },
+    handleError(error){
+      this.loading.close();
+      this.$notify.error({
+          title: error.status,
+          message: error.statusText
+        });
     }
   },
   beforeMount() {
@@ -50,7 +57,7 @@ export default {
     })
     apiService.getAllArenas()
       .then(data => this.receivingData(data.data))
-      .catch(err => console.log(err));
+      .catch(err => this.handleError(err.response));
   },
 };
 </script>
