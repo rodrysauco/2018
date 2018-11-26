@@ -3,7 +3,7 @@
     <recard-component 
       v-for="player in players" 
       :key="player.level"
-      :url="'../media/player.png'"
+      :url="'/img/player.849c79dc.png'"
       :name="''+player.level"
       :title="'Level ' + player.level"
       :subtitle="'Max exp: '+player.maxExp"

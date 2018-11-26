@@ -1,7 +1,8 @@
 <template>
   <el-card class="recard">
     <div class="recard__image" v-if="url">
-      <img :src="url" :alt="name+' image'">
+      <img v-if="title === 'Season Reward Chest'" src="./../media/chest.png" :alt="name+' image'">
+      <img v-else :src="url" :alt="name+' image'">
     </div>
     <div class="recard__content">
       <section class="recard__title">

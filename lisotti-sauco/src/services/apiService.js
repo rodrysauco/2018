@@ -36,7 +36,7 @@ export default {
   getAllPlayers() {
     return axios.get(baseURL + "players");
   },
-  getPlayer() {
+  getPlayer(idName) {
     return axios.get(baseURL + 'players/' + idName);
   },
 
@@ -49,6 +49,10 @@ export default {
       if (chest.league) {
         chest.url = chest.url.replace("-" + chest.league, "");
       }
+      if (chest.name === "Season Reward Chest") {
+        chest.urlLocal = "./../media/chest.png";
+      }
+
     })
     return chests;
   },

@@ -50,6 +50,7 @@ export default {
       this.chests = data;
       this.loading.close();
       this.chests = apiService.translateImagesUrl(this.chests);
+      
     }
   },
   computed: {
