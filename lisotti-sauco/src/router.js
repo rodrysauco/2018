@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+import IndexComponent from './components/IndexComponent';
 import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
 import CardComponent from './components/CardComponent.vue';
@@ -22,6 +23,11 @@ export default new VueRouter({
   routes: [
     {
       path: '/',
+      name: 'index',
+      component: IndexComponent
+    },
+    {
+      path: '/home',
       name: 'home',
       component: HomeComponent
     },

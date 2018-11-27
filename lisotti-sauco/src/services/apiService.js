@@ -1,12 +1,4 @@
-/* 
-  Imagenes:
-    /images/arenas/${idName}.png	Arenas images
-    /images/cards/${idName}.png	Cards images
-    /images/chests/${idName}.png	Chests images
-    /images/leagues/${idName}.png	Leagues images
-*/
 const baseURL = 'http://www.clashapi.xyz/api/';
-const imagesURL = 'http://www.clashapi.xyz/images/';
 import axios from 'axios';
 export default {
   getAllArenas() {
