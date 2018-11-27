@@ -1,8 +1,10 @@
 <template>
   <div class="home__wrapper">
     <el-row class="headerActions">
-      <span class="appHeader"><img src="../media/clash_logo.png" alt="Clash Royale Logo"></span>
-      <el-menu :default-active="index" class="el-menu-demo" mode='horizontal' :router='true'>
+      <span class="appHeader">
+        <img src="../media/clash_logo.png" alt="Clash Royale Logo">
+      </span>
+      <el-menu :default-active="index" class="el-menu-demo" mode="horizontal" :router="true">
         <el-menu-item index="/home">Home</el-menu-item>
         <el-menu-item index="/arenas">Arenas</el-menu-item>
         <el-menu-item index="/cards">Cards</el-menu-item>
@@ -10,10 +12,11 @@
         <el-menu-item index="/leagues">Leagues</el-menu-item>
         <el-menu-item index="/players">Players</el-menu-item>
       </el-menu>
+      <el-button @click="logout" class="logoutButton" type="primary" size="mini">Logout</el-button>
     </el-row>
     <el-container>
-      <transition name='component-fade' mode="out-in">
-        <router-view />
+      <transition name="component-fade" mode="out-in">
+        <router-view/>
       </transition>
     </el-container>
   </div>
@@ -25,34 +28,17 @@ import router from "../router.js";
 export default {
   name: "index-component",
   computed: {
-    index: function() {
+    index: function () {
       let route = this.$route.path.split("/");
       return "/" + route[1];
     }
   },
   methods: {
-    checkStatus() {
-      let credentials = loginService.getCredentials();
-      if (credentials === null) {
-        router.push({ name: "login" });
-      }
-    },
-    loading(){
-      const loading = this.$loading({
-        lock: true,
-        text: 'Loading',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      });
-      setTimeout(() => {
-        loading.close();
-      }, 1000);
+    logout() {
+      loginService.logout();
+      router.push({ name: "login" });
     }
   },
-  beforeMount() {
-    this.checkStatus();
-    this.loading();
-  }
 };
 </script>
 
@@ -74,6 +60,11 @@ export default {
   width: 85%;
   margin-top: 16px;
   margin-bottom: 16px;
+}
+.logoutButton{
+  position: absolute;
+  top: 30px;
+  right: 2.25%;
 }
 @media only screen and (max-width : 800px){
   .headerActions > ul {

@@ -1,18 +1,19 @@
 <template>
   <div class="container" v-if="arenas.length">
-    <recard-component 
-      v-for="arena in arenas" 
-      :key="arena.idName" 
+    <recard-component
+      v-for="arena in arenas"
+      :key="arena.idName"
       :url="'http://www.clashapi.xyz/images/arenas/'+arena.idName+'.png'"
       :name="arena.name"
       :title="arena.name"
       :subtitle="'Victory Gold: '+arena.victoryGold"
-      @clicked="redirectTo(arena.idName)">
-    </recard-component>
+      @clicked="redirectTo(arena.idName)"
+    ></recard-component>
   </div>
 </template>
 <script>
 import RecardComponent from './RecardComponent';
+import loginService from "./../services/loginService.js";
 import router from '../router.js';
 import apiService from "./../services/apiService.js";
 export default {
@@ -26,32 +27,39 @@ export default {
       arenas: []
     };
   },
-  methods:{
-    redirectTo(key){
+  methods: {
+    checkStatus() {
+      let credentials = loginService.getCredentials();
+      if (credentials === null) {
+        router.push({ name: "login" });
+      }
+    },
+    redirectTo(key) {
       router.push({
-        name : 'arena',
-        params : {
-          id : key
+        name: 'arena',
+        params: {
+          id: key
         }
       })
     },
-    receivingData(data){
+    receivingData(data) {
       this.arenas = data;
       this.loading.close()
     },
-    handleError(error){
+    handleError(error) {
       this.loading.close();
       this.$notify.error({
-          title: error.status,
-          message: error.statusText
-        });
+        title: error.status,
+        message: error.statusText
+      });
     }
   },
   beforeMount() {
+    this.checkStatus();
     this.loading = this.$loading({
       lock: true,
       text: 'Loading',
-      spinner:'el-icon-loading',
+      spinner: 'el-icon-loading',
       background: 'rgba(0, 0, 0, 0.7)'
     })
     apiService.getAllArenas()

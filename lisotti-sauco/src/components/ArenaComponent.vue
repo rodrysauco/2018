@@ -33,7 +33,11 @@
               <span>{{chest.name}}</span>
             </div>
             <div class="carousel__action">
-              <el-button size="medium" @click="clickedChest(chest.idName)" class="button">More details</el-button>
+              <el-button
+                size="medium"
+                @click="clickedChest(chest.idName)"
+                class="button"
+              >More details</el-button>
             </div>
           </el-carousel-item>
         </el-carousel>
@@ -65,7 +69,11 @@
               <span>{{league.name}}</span>
             </div>
             <div class="carousel__action">
-              <el-button size="medium" @click="clickedLeague(league.idName)" class="button">More details</el-button>
+              <el-button
+                size="medium"
+                @click="clickedLeague(league.idName)"
+                class="button"
+              >More details</el-button>
             </div>
           </el-carousel-item>
         </el-carousel>
@@ -75,6 +83,7 @@
 </template>
 <script>
 import apiService from '@/services/apiService';
+import loginService from "./../services/loginService.js";
 import router from './../router';
 export default {
   name: 'arena-component',
@@ -88,10 +97,11 @@ export default {
     }
   },
   beforeMount() {
+    this.checkStatus();
     this.loading = this.$loading({
       lock: true,
       text: 'Loading',
-      spinner:'el-icon-loading',
+      spinner: 'el-icon-loading',
       background: 'rgba(0, 0, 0, 0.7)'
     });
     let route = this.$route.path.split("/");
@@ -100,6 +110,12 @@ export default {
       .catch(err => this.handleError(err.response))
   },
   methods: {
+    checkStatus() {
+      let credentials = loginService.getCredentials();
+      if (credentials === null) {
+        router.push({ name: "login" });
+      }
+    },
     goBack() {
       router.go(-1);
     },
@@ -122,12 +138,12 @@ export default {
       apiService.translateImageUrl(data);
       this.chests.push(data);
     },
-    handleError(error){
+    handleError(error) {
       this.loading.close();
       this.$notify.error({
-          title: error.status,
-          message: error.statusText
-        });
+        title: error.status,
+        message: error.statusText
+      });
     },
     bringCardInfo() {
       this.cards = [];
@@ -151,14 +167,14 @@ export default {
     replaceLeague(data) {
       this.leagues.push(data);
     },
-    clickedCard(value){
-      router.push({ path:`/cards/${value}`});
+    clickedCard(value) {
+      router.push({ path: `/cards/${value}` });
     },
-    clickedChest(value){
-      router.push({ path:`/chests/${value}`});
+    clickedChest(value) {
+      router.push({ path: `/chests/${value}` });
     },
-    clickedLeague(value){
-      router.push({ path:`/leagues/${value}`});
+    clickedLeague(value) {
+      router.push({ path: `/leagues/${value}` });
     }
   }
 }

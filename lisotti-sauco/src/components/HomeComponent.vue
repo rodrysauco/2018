@@ -68,7 +68,23 @@
 </template>
 <script>
 export default {
-  name:'home-component'
+  name:'home-component',
+  methods:{
+    loading(){
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+      setTimeout(() => {
+        loading.close();
+      }, 500);
+    }
+  },
+  beforeMount(){
+    this.loading();
+  }
 }
 </script>
 <style>

@@ -2,7 +2,7 @@
 export default{
   login(username,pass){
     let tok = username+pass;
-    $cookies.set("U53RN4M3",btoa(tok),60*30);
+    $cookies.set("U53RN4M3",btoa(tok),60*60*2);
   },
   getCredentials(){
     return $cookies.get('U53RN4M3');

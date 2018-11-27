@@ -27,6 +27,7 @@
 </template>
 <script>
 import apiService from '@/services/apiService';
+import loginService from "./../services/loginService.js";
 import router from './../router';
 export default {
   name: 'card-component',
@@ -49,6 +50,12 @@ export default {
       .catch(err => this.handleError(err.response))
   },
   methods: {
+    checkStatus() {
+      let credentials = loginService.getCredentials();
+      if (credentials === null) {
+        router.push({ name: "login" });
+      }
+    },
     goBack() {
       router.go(-1);
     },
@@ -57,6 +64,7 @@ export default {
       this.loading.close();
     },
     handleError(error) {
+      this.checkStatus();
       this.loading.close();
       this.$notify.error({
         title: error.status,

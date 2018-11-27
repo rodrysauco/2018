@@ -22,6 +22,7 @@
 import RecardComponent from './RecardComponent';
 import router from '../router.js';
 import apiService from "./../services/apiService.js";
+import loginService from "./../services/loginService.js";
 export default {
   name: "cards-component",
   components: {
@@ -35,6 +36,12 @@ export default {
     };
   },
   methods: {
+    checkStatus() {
+      let credentials = loginService.getCredentials();
+      if (credentials === null) {
+        router.push({ name: "login" });
+      }
+    },
     currentChange(page) {
       this.currentPage = page;
     },
@@ -64,6 +71,7 @@ export default {
     }
   },
   beforeMount() {
+    this.checkStatus();
     this.loading = this.$loading({
       lock: true,
       text: 'Loading',
