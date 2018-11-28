@@ -83,7 +83,6 @@
 </template>
 <script>
 import apiService from '@/services/apiService';
-import loginService from "./../services/loginService.js";
 import router from './../router';
 export default {
   name: 'arena-component',
@@ -97,7 +96,6 @@ export default {
     }
   },
   beforeMount() {
-    this.checkStatus();
     this.loading = this.$loading({
       lock: true,
       text: 'Loading',
@@ -110,12 +108,6 @@ export default {
       .catch(err => this.handleError(err.response))
   },
   methods: {
-    checkStatus() {
-      let credentials = loginService.getCredentials();
-      if (credentials === null) {
-        router.push({ name: "login" });
-      }
-    },
     goBack() {
       router.go(-1);
     },

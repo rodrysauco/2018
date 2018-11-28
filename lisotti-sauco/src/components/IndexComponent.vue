@@ -61,12 +61,12 @@ export default {
   margin-top: 16px;
   margin-bottom: 16px;
 }
-.logoutButton{
+.logoutButton {
   position: absolute;
   top: 30px;
   right: 2.25%;
 }
-@media only screen and (max-width : 800px){
+@media only screen and (max-width: 1200px) {
   .headerActions > ul {
     width: 75%;
   }

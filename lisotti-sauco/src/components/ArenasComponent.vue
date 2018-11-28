@@ -13,7 +13,6 @@
 </template>
 <script>
 import RecardComponent from './RecardComponent';
-import loginService from "./../services/loginService.js";
 import router from '../router.js';
 import apiService from "./../services/apiService.js";
 export default {
@@ -28,12 +27,6 @@ export default {
     };
   },
   methods: {
-    checkStatus() {
-      let credentials = loginService.getCredentials();
-      if (credentials === null) {
-        router.push({ name: "login" });
-      }
-    },
     redirectTo(key) {
       router.push({
         name: 'arena',
@@ -55,7 +48,6 @@ export default {
     }
   },
   beforeMount() {
-    this.checkStatus();
     this.loading = this.$loading({
       lock: true,
       text: 'Loading',

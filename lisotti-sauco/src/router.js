@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+import loginService from "@/services/loginService.js";
+
 import IndexComponent from './components/IndexComponent';
 import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
@@ -17,7 +19,7 @@ import PlayerComponent from './components/PlayerComponent';
 
 Vue.use(VueRouter);
 
-export default new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -89,5 +91,24 @@ export default new VueRouter({
       name: 'player',
       component: PlayerComponent
     },
-  ]
+  ],
 })
+
+router.beforeEach((to, from, next) => {
+  const token = loginService.getCredentials();
+  if (to.name !== 'login') {
+    if (!token) {
+      if (to.name === 'login') next()
+      else next({ name: 'login' })
+
+    } else {
+      if (to.path === '/') next({ name: 'home' })
+      else next()
+    }
+  } else {
+    if (to.path === '/') next({ name: 'home' })
+    else next()
+  }
+})
+
+export default router;
