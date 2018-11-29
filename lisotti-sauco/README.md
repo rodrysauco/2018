@@ -24,3 +24,7 @@ npm run test
 ```
 npm run lint
 ```
+
+### App starts on port 8081
+### You dont need an user or password because that inputs only are used to set token.
+
