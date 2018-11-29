@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import loginService from "@/services/loginService.js";
 
+import PageNotFound from "./components/PageNotFound";
 import IndexComponent from './components/IndexComponent';
 import HomeComponent from './components/HomeComponent';
 import LoginComponent from './components/LoginComponent';
@@ -91,6 +92,11 @@ const router = new VueRouter({
       name: 'player',
       component: PlayerComponent
     },
+    {
+      path:'*',
+      name:'error',
+      component: PageNotFound
+    }
   ],
 })
 

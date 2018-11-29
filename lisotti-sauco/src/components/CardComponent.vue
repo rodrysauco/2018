@@ -57,12 +57,18 @@ export default {
       this.loading.close();
     },
     handleError(error) {
-      this.checkStatus();
       this.loading.close();
-      this.$notify.error({
-        title: error.status,
-        message: error.statusText
-      });
+        if(error !== undefined){
+          this.$notify.error({
+          title: error.status,
+          message: error.statusText
+        });
+      } else  {
+        this.$notify.error({
+          title: 'No conecction',
+          message: 'There is no internet connection'
+        });
+      }
     },
   }
 }

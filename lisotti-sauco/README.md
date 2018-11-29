@@ -1,30 +1,21 @@
-# lisotti-sauco
+# Lisotti-Sauco
 
 ## Project setup
 ```
-npm install
+npm install 
+```
+OR
+```
+npm i 
 ```
 
-### Compiles and hot-reloads for development
+### Compiles 
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### Instructions
+After fork/clone the repo, you need to place on the folder, run the project setup command 
+then you nedd to install all dependencies running the compile command.
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### App starts on port 8081
-### You dont need an user or password because that inputs only are used to set token.
-
+Then, the app starts to listen and serve on port 8081. You don't need an user or password because that inputs are only used to set a token.
